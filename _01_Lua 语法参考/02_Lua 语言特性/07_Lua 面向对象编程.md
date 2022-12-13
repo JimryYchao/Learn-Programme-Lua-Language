@@ -35,9 +35,9 @@ t:foo(arg)		-- : 表示隐藏 self 参数
 local prototype = {}
 prototype.__index = prototype
 function prototype.new(obj)
-	obj = obj or {}
-	setmetatable(obj, prototype)
-	return obj
+    obj = obj or {}
+    setmetatable(obj, prototype)
+    return obj
 end
 ```
 
@@ -51,11 +51,11 @@ local metaclass = {}
 
 ---Create an object from metaclass
 function metaclass:new(o)
-	o = o or {}
-	self.__index = self
-	setmetatable(o, self)
-	o.base = self			-- 关联超类
-	return o
+    o = o or {}
+    self.__index = self
+    setmetatable(o, self)
+    o.base = self			-- 关联超类
+    return o
 end
 
 local o1 = metaclass:new()
@@ -73,28 +73,28 @@ print(o2.key2)	-- 1
 ```lua
 --- 在表 plist 的列表中查找 k
 local function search(k, plist)
-	for i = 1, #plist, 1 do
-		local v = plist[i][k]
-		if v then return v end
-	end
+    for i = 1, #plist, 1 do
+        local v = plist[i][k]
+        if v then return v end
+    end
 end
 --- 多重继承
 function createClass(...)
-	local c = {}
-	local parent = { ... }
+    local c = {}
+    local parent = { ... }
 
-	setmetatable(c,
-		{ __index = function(t, k)
-			return search(k, parent)
-		end })
+    setmetatable(c,
+        { __index = function(t, k)
+            return search(k, parent)
+        end })
 
-	function c:new()	-- 继承模式
-		o = o or {}
-		self.__index = self
-		setmetatable(o, self)
-		return o
-	end
-	return c
+    function c:new()	-- 继承模式
+        o = o or {}
+        self.__index = self
+        setmetatable(o, self)
+        return o
+    end
+    return c
 end
 ```
 
@@ -105,25 +105,25 @@ end
 
 ```lua
 function CtorClass()
-	local privateStatus = {
-		private = 1
-	}
-	local function extrefoo()
-		print("extrefoo")
-	end
+    local privateStatus = {
+        private = 1
+    }
+    local function extrefoo()
+        print("extrefoo")
+    end
 
-	P1 = function() print(privateStatus.private) end
-	P2 = function() extrefoo() end
+    P1 = function() print(privateStatus.private) end
+    P2 = function() extrefoo() end
 
-	return {
-		P1 = P1,
-		P2 = P2
-	}
+    return {
+        P1 = P1,
+        P2 = P2
+    }
 end
 
 local c = CtorClass()
-c.P1()	-- 1
-c.P2()	-- extrefoo
+c.P1()   -- 1
+c.P2()   -- extrefoo
 ```
 
 ---
@@ -133,17 +133,17 @@ c.P2()	-- extrefoo
 
 ```lua
 function oneObj(key)
-	return function(...)
-		if key == "key1" then
-			print("Invoke key1", ...)
-		elseif key == "key2" then
-			print("Invoke key2", ...)
-		end
-	end
+    return function(...)
+        if key == "key1" then
+            print("Invoke key1", ...)
+        elseif key == "key2" then
+            print("Invoke key2", ...)
+        end
+    end
 end
 
 local o = oneObj("key1")
-o(1, 2, 3) --	Invoke key1   1   2   3
+o(1, 2, 3)  --  Invoke key1   1   2   3
 ```
 
 ---

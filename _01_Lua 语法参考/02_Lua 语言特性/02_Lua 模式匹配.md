@@ -21,8 +21,8 @@
 
 ```lua
 s = "hello world"
-local i,j = string.find(s, "hello")	-- 1, 5
-print(string.sub(s,i,j))			-- hello
+local i,j = string.find(s, "hello") -- 1, 5
+print(string.sub(s,i,j))            -- hello
 ```
 
 > 简单搜索模式
@@ -30,8 +30,8 @@ print(string.sub(s,i,j))			-- hello
 - ```string.find(s, pattern, start?, searchMode?)``` 第四个参数用来说明是否进行简单搜索，即忽略模式而在目标字符串中进行纯粹的查找字符串的动作
 
 ```lua
-string.find("a [word]","[")			-- error, [ 在模式中有特殊意义
-string.find("a [word]","[",1,true)	--> 3	3
+string.find("a [word]","[")         -- error, [ 在模式中有特殊意义
+string.find("a [word]","[",1,true)  --> 3	3
 ```
 
 ---
@@ -40,10 +40,10 @@ string.find("a [word]","[",1,true)	--> 3	3
 - 函数 ```string.match``` 用于返回与模式匹配的子串，不同于 ```find``` 返回索引位置
 
 ```lua
-print(string.match("hello world", "hello"))		--> hello
+print(string.match("hello world", "hello"))    --> hello
 
 date = "Today is 1/1/1970"
-print(string.match(date, "%d+/%d+/%d+"))		--> 1/1/1970
+print(string.match(date, "%d+/%d+/%d+"))       --> 1/1/1970
 ```
 
 ---
@@ -53,7 +53,7 @@ print(string.match(date, "%d+/%d+/%d+"))		--> 1/1/1970
 
 ```lua
 s = string.gsub("Lua is cute", "cute", "great")
--- Lua is great		1 --> 返回第二个结果表示发生替换的次数
+-- Lua is great     1 --> 返回第二个结果表示发生替换的次数
 ```
 
 ---
@@ -65,7 +65,7 @@ s = string.gsub("Lua is cute", "cute", "great")
 s = "some string"
 words = {}
 for w in string.gmatch(s, "%a+") do
-	words[#words + 1] = w	-- words = {"some", "string"}
+    words[#words + 1] = w    -- words = {"some", "string"}
 end
 ```
 
@@ -75,34 +75,34 @@ end
 > 预置的字符分类及其对应的含义
 
 ```Lua
-.		-- 任意字符
-%a		-- 字母
-%c		-- 控制字符
-%d		-- 数字
-%g		-- 除空格外的可打印字符
-%l		-- 小写字母
-%p		-- 标点符号
-%s		-- 空白字符
-%u		-- 大写字母
-%w		-- 字母和数字
-%x		-- 十六进制数字
+.          -- 任意字符
+%a         -- 字母
+%c         -- 控制字符
+%d         -- 数字
+%g         -- 除空格外的可打印字符
+%l         -- 小写字母
+%p         -- 标点符号
+%s         -- 空白字符
+%u         -- 大写字母
+%w         -- 字母和数字
+%x         -- 十六进制数字
 -- 以上字符的大写形式表示该字符分类的补集
 
-%M		-- M 表示对魔法字符的转义，可以是 ().%+-*?[]^$，例如 %% 表示 %
+%M         -- M 表示对魔法字符的转义，可以是 ().%+-*?[]^$，例如 %% 表示 %
 ```
 
 > 魔法字符
 
 ```Lua
-[]		-- 字符集	[0123456] 表示 0-6
-- 		-- 连接字符集范围 [0-6]
-^		-- 字符集的补集 [^\n] 表示换行符外的字符，%S 等价于 [^%s]
-+		-- 重复至少一次，%d+ 表示匹配一个或多个数字
-*		-- 重复最少零次
--		-- 重复最少零次（最小匹配）
-?		-- 出现零次或一次
-^,$		-- 锚定目标字符串开头(^)或结尾($)，^ 表示从字符串开头开始查找
-%b xy	-- 匹配成对的字符串，x 为起始，y 为结束。例如 %b() 返回包含 () 内中间的字符串
+[]         -- 字符集	[0123456] 表示 0-6
+-          -- 连接字符集范围 [0-6]
+^          -- 字符集的补集 [^\n] 表示换行符外的字符，%S 等价于 [^%s]
++          -- 重复至少一次，%d+ 表示匹配一个或多个数字
+*          -- 重复最少零次
+-          -- 重复最少零次（最小匹配）
+?          -- 出现零次或一次
+^,$        -- 锚定目标字符串开头(^)或结尾($)，^ 表示从字符串开头开始查找
+%b xy      -- 匹配成对的字符串，x 为起始，y 为结束。例如 %b() 返回包含 () 内中间的字符串
 ```
 
 > ```%f[char-set]```
@@ -112,7 +112,7 @@ end
 ```lua
 s = "the anthem is the theme"
 print(string.gsub(s, "%f[%w]the%f[%W]", "one"))
-	--> one anthem is one theme
+    --> one anthem is one theme
 ```
 
 ---
@@ -123,13 +123,13 @@ print(string.gsub(s, "%f[%w]the%f[%W]", "one"))
 ```lua
 pair = "name = Anna"
 key, value = string.match(pair, "(%a+)%s*=%s*(%a+)")
-print(key, value)	--> name	Anna
+print(key, value)	--> name  Anna
 ```
 
 - 空白捕捉 ```()``` 用于捕获模式在目标字符串中的位置
 
 ```lua
-print(string.match("hello", "()ll()"))	-->  3	5 (和 string.find 有所区别                      )
+print(string.match("hello", "()ll()"))	-->  3  5 (和 string.find 有所区别                      )
 ```
 
 - ```% num``` 表示匹配第 num 个捕获的副本，```%0``` 表示整个匹配
@@ -137,20 +137,20 @@ print(string.match("hello", "()ll()"))	-->  3	5 (和 string.find 有所区别   
 ```lua
 s = [[then he said: "it's all right"!]]
 q, quotePart = string.match(s, "([\"'])(.-)%1")
-q	 		--> "
-quotePart 	--> it's all right
+q           --> "
+quotePart   --> it's all right
 ```
 
 > 剔除字符串两端空格
 
 ```lua
 function string.trim(s)
-	s = string.gsub(s, "^%s*(.-)%s*$", "%1")
-	return s
+    s = string.gsub(s, "^%s*(.-)%s*$", "%1")
+    return s
 end
 
 print(string.trim("  some string  "))
-	--> some string
+    --> some string
 ```
 
 ---
@@ -160,7 +160,7 @@ print(string.trim("  some string  "))
 
 ```lua
 function expand(s)
-	return (string.gsub(s, "$(%w+)", _G))
+    return (string.gsub(s, "$(%w+)", _G))
 end
 name = "Lua"; status = "great"
 print(expand("$name is $status"))	--> Lua is great
@@ -177,26 +177,26 @@ print(expand("$name is $status"))	--> Lua is great
 ```lua
 -- 读取文本，并记录每个单词出现的次数
 function F(file, n)
-	assert(tonumber(n) > 0)
-	local f = io.input(file)
-	local counter = {}
-	for line in io.lines() do
-		for word in string.gmatch(line, "%w+") do
-			counter[word] = (counter[word] or 0) + 1
-		end
-	end
-	io.close(f)
-	local words = {}
-	for w in pairs(counter) do
-		words[#words + 1] = w
-	end
-	table.sort(words, function(w1, w2)
-		return counter[w1] > counter[w2] or counter[w1] == counter[w2] and w1 < w2
-	end)
-	for i = 1, n > #words and #words or n do
-		io.output(io.stdout):write(words[i], "\t", counter[words[i]], "\n")
-	end
-	io.close(io.stdout)
+    assert(tonumber(n) > 0)
+    local f = io.input(file)
+    local counter = {}
+    for line in io.lines() do
+        for word in string.gmatch(line, "%w+") do
+            counter[word] = (counter[word] or 0) + 1
+        end
+    end
+    io.close(f)
+    local words = {}
+    for w in pairs(counter) do
+        words[#words + 1] = w
+    end
+    table.sort(words, function(w1, w2)
+        return counter[w1] > counter[w2] or counter[w1] == counter[w2] and w1 < w2
+    end)
+    for i = 1, n > #words and #words or n do
+        io.output(io.stdout):write(words[i], "\t", counter[words[i]], "\n")
+    end
+    io.close(io.stdout)
 end
 
 F("a.lua", 99)

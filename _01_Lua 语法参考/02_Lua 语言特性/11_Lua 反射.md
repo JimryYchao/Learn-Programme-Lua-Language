@@ -26,17 +26,17 @@
 - 函数 ```debug.getinfo(function|num [, what?])``` 返回与函数或栈层次的有关的一些数据的表，这个表包含：
 
 <table>
-	<tr>
-		<th>表字段</th>
-		<th>Lua 函数</th>
-		<th>Lua 代码段</th>
-		<th>C 函数</th>
-	</tr>
-	<tr>
-		<td>source</td>
-		<td>函数定义的位置</td>
-		<td>load 返回定义字符串</td>
-		<td>=[c]</td>
+    <tr>
+        <th>表字段</th>
+        <th>Lua 函数</th>
+        <th>Lua 代码段</th>
+        <th>C 函数</th>
+    </tr>
+    <tr>
+        <td>source</td>
+        <td>函数定义的位置</td>
+        <td>load 返回定义字符串</td>
+        <td>=[c]</td>
 	</tr>
 	<tr>
 		<td>short_src</td>
@@ -107,12 +107,12 @@ print(debug.getinfo(0).name)	-- getinfo
 > 参数 what？
 
 ```lua
-n		选择返回 name 和 namewhat
-f		选择返回 func
-S		选择返回 source、short_src、what、linedefined、lastlinedefined
-l		选择返回 currentline
-L		选择返回 activelines
-u		选择返回 nup、nparams、isvararg
+n          选择返回 name 和 namewhat
+f          选择返回 func
+S          选择返回 source、short_src、what、linedefined、lastlinedefined
+l          选择返回 currentline
+L          选择返回 activelines
+u          选择返回 nup、nparams、isvararg
 ```
 
 ---
@@ -123,14 +123,15 @@ u		选择返回 nup、nparams、isvararg
 
 ```lua
 local t = {}
-print(debug.getlocal(1,1))	-- t	table: 000001E7622C4610
+print(debug.getlocal(1,1))
+-- t	table: 000001E7622C4610
 
 function foo(a,b)
-	local i = 1
-	print(debug.getlocal(1,3))	-- i	1
+    local i = 1
+    print(debug.getlocal(1,3))   -- i	1
 end
-print(debug.getlocal(foo,2))	-- b
-print(debug.getlocal(foo,3))	-- nil
+print(debug.getlocal(foo,2))     -- b
+print(debug.getlocal(foo,3))     -- nil
 
 ```
 
@@ -138,12 +139,12 @@ print(debug.getlocal(foo,3))	-- nil
 
 ```lua
 function foo(a,b)
-	local i = 1
-	print(debug.getlocal(1,3))	-- i	1
+    local i = 1
+    print(debug.getlocal(1,3))   -- i	1
 end
 local co = coroutine.create(foo)
-print(debug.getlocal(co,foo,1))	-- a
-print(debug.getlocal(co,foo,3))	-- nil
+print(debug.getlocal(co,foo,1))  -- a
+print(debug.getlocal(co,foo,3))  -- nil
 ```
 
 > 变长参数信息
@@ -152,11 +153,11 @@ print(debug.getlocal(co,foo,3))	-- nil
 
 ```lua
 function foo(a, ...)
-	local i = 1
-	print(debug.getlocal(1, -2))
+    local i = 1
+    print(debug.getlocal(1, -2))
 end
 
-foo(1, 3, 5)	-- (vararg)		5
+foo(1, 3, 5)    -- (vararg)		5
 ```
 
 > setlocal
@@ -172,11 +173,11 @@ foo(1, 3, 5)	-- (vararg)		5
 ```lua
 local up1 = 1
 function foo()
-	local a = up1
+    local a = up1
 end
-print(debug.getupvalue(foo, 1))		-- up1	1
-print(debug.setupvalue(foo, 1, 2))	-- up1
-print(up1)							-- 2
+print(debug.getupvalue(foo, 1))     -- up1	1
+print(debug.setupvalue(foo, 1, 2))  -- up1
+print(up1)                          -- 2
 ```
 
 ---
@@ -209,46 +210,46 @@ local Names    = {}
 -- 可以在函数活动时获取其名称
 
 local function hook()
-	local f = debug.getinfo(2, "f").func
-	local count = Counters[f]
-	if (count) == nil then
-		Counters[f] = 1
-		Names[f] = debug.getinfo(2, "Sn")
-	else
-		Counters[f] = count + 1
-	end
+    local f = debug.getinfo(2, "f").func
+    local count = Counters[f]
+    if (count) == nil then
+        Counters[f] = 1
+        Names[f] = debug.getinfo(2, "Sn")
+    else
+        Counters[f] = count + 1
+    end
 end
 
 function getName(f)
-	local n = Names[f]
-	if (n.what == "C") then
-		return n.name
-	end
-	local lc = string.format("[%s]:%d", n.short_src, n.linedefined)
-	if n.what ~= "main" and n.namewhat ~= "" then
-		return string.format("%s (%s)", lc, n.name)
-	else
-		return lc
-	end
+    local n = Names[f]
+    if (n.what == "C") then
+        return n.name
+    end
+    local lc = string.format("[%s]:%d", n.short_src, n.linedefined)
+    if n.what ~= "main" and n.namewhat ~= "" then
+        return string.format("%s (%s)", lc, n.name)
+    else
+        return lc
+    end
 end
 
-function Main()				-- 主函数
-	print("This is Main function...")
+function Main()             -- 主函数
+    print("This is Main function...")
 end
 
-debug.sethook(hook, "c") 	-- 设置 call 事件的钩子
-Main() 						-- 运行主程序
-debug.sethook() 			-- 关闭钩子
+debug.sethook(hook, "c")    -- 设置 call 事件的钩子
+Main()                      -- 运行主程序
+debug.sethook()             -- 关闭钩子
 
 for func, count in pairs(Counters) do
-	print(getName(func), count)
+    print(getName(func), count)
 end
 
 --[[
-	This is Main function...
-	print   1
-	[d:\_Lua_\profiler.lua]:30 (Main)       1
-	sethook 1
+    This is Main function...
+    print   1
+    [d:\_Lua_\profiler.lua]:30 (Main)       1
+    sethook 1
 ]]
 ```
 
@@ -261,14 +262,14 @@ end
 
 ```lua
 local debug = require "debug"
-local steplimit = 1000 -- 最大能执行的 steps
+local steplimit = 1000     -- 最大能执行的 steps
 local count = 0
 
 local function step()
-	count = count + 1
-	if count > steplimit then
-		error("script uses too much CPU")
-	end
+    count = count + 1
+    if count > steplimit then
+        error("script uses too much CPU")
+    end
 end
 debug.sethook(step, "clr", 100) -- 设置钩子
 ```
@@ -277,18 +278,18 @@ debug.sethook(step, "clr", 100) -- 设置钩子
 
 ```lua
 local function checkmem()
-	if collectgarbage("count") > memlimit then
-		error("script uses too much memory")
-	end
+    if collectgarbage("count") > memlimit then
+        error("script uses too much memory")
+    end
 end
 
 local count = 0
 local function step()
-	checkmem()
-	count = count + 1
-	if count > steplimit then
-		error("script uses to much CPU")
-	end
+    checkmem()
+    count = count + 1
+    if count > steplimit then
+        error("script uses to much CPU")
+    end
 end
 
 debug.sethook(step, "clr", 100)
@@ -296,7 +297,7 @@ debug.sethook(step, "clr", 100)
 --[[
 local s = "123456789012345"
 for i = 1, 36 do
-	s = s .. s
+    s = s .. s
 end
 ]]
 ```
@@ -310,25 +311,25 @@ local count = 0
 
 -- 设置授权的函数
 local validfunc = {
-	[print] = true,
-	[string.upper] = true,
-	[string.lower] = true,
-	[string.format] = false,
-	--...	-- 其他授权函数
+    [print] = true,
+    [string.upper] = true,
+    [string.lower] = true,
+    [string.format] = false,
+    --...    -- 其他授权函数
 }
 
 local function hook(event)
-	print(tostring(event))
-	if event == "call" then
-		local info = debug.getinfo(2, "fn")
-		if not validfunc[info.func] then
-			error("calling bad function: " .. (info.name or "?"))
-		end
-	end
-	count = count + 1
-	if (count > steplimit) then
-		error("script uses too much CPU")
-	end
+    print(tostring(event))
+    if event == "call" then
+        local info = debug.getinfo(2, "fn")
+        if not validfunc[info.func] then
+            error("calling bad function: " .. (info.name or "?"))
+        end
+    end
+    count = count + 1
+    if (count > steplimit) then
+        error("script uses too much CPU")
+    end
 end
 
 debug.sethook(hook, "clr", 100)

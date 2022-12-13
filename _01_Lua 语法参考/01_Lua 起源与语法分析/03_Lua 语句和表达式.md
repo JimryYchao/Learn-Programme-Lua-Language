@@ -28,23 +28,23 @@
 
 ```lua
   -- 加法
-	13 + 15		--> 28
-	13.0 + 15.0	--> 28.0
+    13 + 15      --> 28
+    13.0 + 15.0  --> 28.0
   -- 减法
-	13 - 15  	--> -2
-	13.0 - 15	--> -2.0
+    13 - 15      --> -2
+    13.0 - 15    --> -2.0
   -- 乘法
-	13 * 15		--> 195
-	13 * 15.0	--> 195.0
+    13 * 15      --> 195
+    13 * 15.0    --> 195.0
   -- 除法
-	13 / 2		--> 6.5
-	6 / 2		--> 3.0
+    13 / 2       --> 6.5
+    6 / 2        --> 3.0
 ```
 
 > 幂运算
 
 ```lua
-	2^5			--> 32
+2^5	         --> 32
 ```
 
 > 取模与 floor 整除法
@@ -52,17 +52,17 @@
 - floor 除法对得到的商向负无穷取整
 
 ```Lua
-	3 // 2		--> 1
-	3.0 // 2	--> 1.0
-	-9 // 2		--> -5
-	1.5 // 0.5	--> 3.0
+3 // 2         --> 1
+3.0 // 2       --> 1.0
+-9 // 2        --> -5
+1.5 // 0.5     --> 3.0
 ```
 
 - 取模运算的定义 ```a%b == a-((a//b)*b)```，其结果的符号与第二操作数的符号保持一致
 
 ```lua
-	-9 % 2		--> 1:  -9-(-5)*2 = 1
-	-9 % 2.0	--> 1.0
+-9 % 2      --> 1:  -9-(-5)*2 = 1
+-9 % 2.0    --> 1.0
 ```
 
 > 利用取模运算保留浮点运算有效位
@@ -70,28 +70,28 @@
 - ```X - X%(1E-n)```，n 表示要保留的小数有效位数
 
 ```lua
-	math.pi - math.pi % 0.0001	--> 3.1415
+math.pi - math.pi % 0.0001	--> 3.1415
 ```
 
 ---
 ### 1.2 关系运算符
 
 ```Lua
-  	<   小于
-  	<=  小于等于
-  	>   大于
- 	>=  大于等于
-  	==  相等
-  	~=  不等
+<     小于
+<=    小于等于
+>     大于
+>=    大于等于
+==    相等
+~=    不等
 ```
 
 ---
 ### 1.3 逻辑运算符
 
 ```lua
-	and --> 与
-	or	--> 或
-	not --> 非
+and  --> 与
+or   --> 或
+not  --> 非
 ```
 
 - 逻辑运算符 ```and``` 的运算结果为：第一个操作数为 ```false``` 时返回第一个操作数，否则返回第二个操作数
@@ -100,12 +100,12 @@
 - ```not``` 返回取反 boolean
 
 ```lua
-print(true and false)	--> false
-print(false or true)	--> true
-print(not true)			--> false
+print(true and false)   --> false
+print(false or true)    --> true
+print(not true)         --> false
 -- Lua 的逻辑运算支持短路, 左操作数不满足, 则右操作数不执行
-print(false and print("123"))	--> false；print("123被短路")，并不执行
-print(true and print("123"))	--> 123  nil；(print() 方法的返回值是 nil）
+print(false and print("123"))   --> false；print("123被短路")，并不执行
+print(true and print("123"))    --> 123  nil；(print() 方法的返回值是 nil）
 ```
 
 > 检查一个变量是否初始化
@@ -113,7 +113,7 @@ print(true and print("123"))	--> 123  nil；(print() 方法的返回值是 nil�
 - 某个变量未被初始化时，为其赋值默认值
 
 ```lua
-	x = x or v
+x = x or v
 ```
 
 > 仿三目运算
@@ -121,9 +121,9 @@ print(true and print("123"))	--> 123  nil；(print() 方法的返回值是 nil�
 - 利用 ```and``` 和 ```or``` 的短路特征构造三目运算
 
 ```lua
-	X and Y or Z
-	--> X == true --> Y
-	--> X == false --> Z
+X and Y or Z
+--> X == true --> Y
+--> X == false --> Z
 ```
 
 ---
@@ -136,30 +136,30 @@ print(true and print("123"))	--> 123  nil；(print() 方法的返回值是 nil�
 
 ```lua
 -- 按位与
-	1&1 = 1
-	0&1 = 0
-	0&0	= 0
+    1&1 = 1
+    0&1 = 0
+    0&0	= 0
 -- 按位或
     1|1 = 1
-	1|0 = 1
-	0|0 = 0
+    1|0 = 1
+    0|0 = 0
 -- 按位取反
-	~1 = 0
-	~0 = 1
+    ~1 = 0
+    ~0 = 1
 -- 按位异或
-	1~1 = 0
-	0~0 = 0
-	1~0 = 1
+    1~1 = 0
+    0~0 = 0
+    1~0 = 1
 -- 按位移位
-	12(10) = 00001100(2)
-	00001100 >> 1 = 00000110  --> 12>>1 = 6
-	00001100 << 2 = 00110000  --> 12<<2 = 48
+    12(10) = 00001100(2)
+    00001100 >> 1 = 00000110  --> 12>>1 = 6
+    00001100 << 2 = 00110000  --> 12<<2 = 48
 
-	-18(10) = 11101110(2)	-- 补码表示
-	11101110 << 1 = 11011100  --> -18<<1 = -36
-	11101110 >> 2 = 01111011  --> -18>>2 = 123 (逻辑移位)
+    -18(10) = 11101110(2)     -- 补码表示
+    11101110 << 1 = 11011100  --> -18<<1 = -36
+    11101110 >> 2 = 01111011  --> -18>>2 = 123 (逻辑移位)
 
-	100 >> 66  --> 宽度为 64，结果为 0
+    100 >> 66  --> 宽度为 64，结果为 0
 ```
 
 > 实现算术移位
@@ -167,9 +167,9 @@ print(true and print("123"))	--> 123  nil；(print() 方法的返回值是 nil�
 - 利用 floor 向下整除法模拟实现算术移位，公式为 ```num // (2^n)|0```，当 $n>0$ 表示算术右移；当 $n<0$ 表示算术左移
 
 ```lua
-  -- 负数的算术右移
-	-10 >> 2 等价于 -10//2^2|0 --> -3
-  -- 算术左移
+-- 负数的算术右移
+    -10 >> 2 等价于 -10//2^2|0 --> -3
+-- 算术左移
     -10 >> -2 == -10 << 2 == -10//(2^-2|0) --> -40
 ```
 
@@ -184,18 +184,18 @@ print(true and print("123"))	--> 123  nil；(print() 方法的返回值是 nil�
 ### 1.6 运算符优先级
 
 ```lua
-	^
-	-、#、not、~(按位取反)
-	*、/、//、%
-	+、-
-	..(连接)
-	<<、>>			按位移位
-	&				按位与
-	~				按位异或
-	|				按位或
-	<、>、<=、>=、==、~=
-	and
-	or
+^
+-、#、not、~(按位取反)
+*、/、//、%
++、-
+..             字符串拼接
+<<、>>         按位移位
+&              按位与
+~              按位异或
+|              按位或
+<、>、<=、>=、==、~=
+and
+or
 ```
 
 ---
@@ -222,12 +222,12 @@ end
 
 ```lua
 while <condition> do
-	<code body>
+    <code body>
 end
 ------------------------
 -- 控制表达式括号是可选的
 while a > b do	-- 不满足时跳出
-	a = a - 1
+    a = a - 1
 end
 ```
 
@@ -238,12 +238,12 @@ end
 
 ```lua
 repeat
-	<code body>
+    <code body>
 until <condition>
 ------------------------
 -- 控制表达式括号是可选的
 repeat
-	a = a - 1
+    a = a - 1
 until a < b	-- 满足时跳出
 ```
 
@@ -252,16 +252,16 @@ until a < b	-- 满足时跳出
 
 ```lua
 for i=exp1, exp2 [,exp3] do
-	<code body>
+    <code body>
 end
 --[[
-	exp1 表示光标的起始值
-	exp2 表示光标的最终值
-	exp3 表示光标的迭代步长，默认值为 1，可选
+    exp1 表示光标的起始值
+    exp2 表示光标的最终值
+    exp3 表示光标的迭代步长，默认值为 1，可选
 ]]--
 
 for i=1,10 do
-	print(i)
+    print(i)
 end
 ```
 
@@ -273,7 +273,7 @@ end
 arr = { [1.0] = 1, [2] = 2, [4] = 4, [5] = 5, [7] = 7, [9] = 9 }
 print(#arr) -- 5
 for i = 1, #arr do
-	print(arr[i]) ----- 1,2,nil,4,5  (中断)
+    print(arr[i]) ----- 1,2,nil,4,5  (中断)
 end
 ```
 
@@ -284,7 +284,7 @@ end
 
 ```lua
 for	var-list in exp-list do
-	body
+    body
 end
 -- var-list 一个或多个变量名组成的列表
 -- exp-list 一个或多个表达式组成的列表
@@ -299,13 +299,13 @@ end
 for var_1, ..., var_n in explist do block end
 ---- 等价于
 do
-	local _f, _s, _var = explist
-	while true do
-		local var_1, ... var_n = _f(_s, _var)
-		_var = _var_1
-		if _var == nil then break end
-		block
-	end
+    local _f, _s, _var = explist
+    while true do
+        local var_1, ... var_n = _f(_s, _var)
+        _var = _var_1
+        if _var == nil then break end
+        block
+    end
 end
 ```
 
@@ -316,7 +316,7 @@ end
 ```lua
 arr = {1,3,4,5,a="A",b="B"}
 for k,v in pairs(arr) do	-- 键值对遍历
-	print(k,v)
+    print(k,v)
 end
 ```
 
@@ -328,14 +328,14 @@ end
 
 ```lua
 function func(maxCount,value) 
-  if value < maxCount then
-  value = value+1
-  return value,value*2
-  end
+    if value < maxCount then
+    value = value+1
+    return value,value*2
+    end
 end
 -----------------------
 for i,v in func,5,0 do
-  print(i,v)
+    print(i,v)
 end
 --[[
     当5，0传入函数时，会将返回的值依次赋给i，v，然后 i，v 进入
@@ -353,7 +353,7 @@ v，直到函数控制变量不满足条件, 跳出函数作用域，迭代或�
 ```lua
 arr = {1,3,4,5,a="A",b="B"}
 for i,v in ipairs(arr) do	-- 列表遍历
-	print(i,v)	-- 1,3,4,5
+    print(i,v)	-- 1,3,4,5
 end
 ```
 
@@ -366,15 +366,15 @@ a = { 1, 2, 3, 4, 5, 6, nil, 7, nil, nil, nil, 7}
 
 print(#a)	-- 12
 for i = 1, #a do
-	print(a[i])		-- 1,2,3,4,5,6,nil,7,nil,nil,nil,7
+    print(a[i])		-- 1,2,3,4,5,6,nil,7,nil,nil,nil,7
 end
 print("-------")
 for index, value in ipairs(a) do
-	print(value)	-- 1,2,3,4,5,6
+    print(value)	-- 1,2,3,4,5,6
 end
 print("-------")
 for index, value in pairs(a) do
-	print(value)	-- 1,2,3,4,5,6,7,7
+    print(value)	-- 1,2,3,4,5,6,7,7
 end
 ```
 
@@ -382,15 +382,15 @@ end
 
 ```lua
 local function iter(t, i)
-	i = i + 1
-	local v = t[i]
-	if v then
-		return i, v
-	end
+    i = i + 1
+    local v = t[i]
+    if v then
+        return i, v
+    end
 end
 
 function ipairs(t)
-	return iter, t, 0
+    return iter, t, 0
 end
 ```
 
@@ -400,7 +400,7 @@ end
 
 ```lua
 function pairs(t)
-	return next, t, nil
+    return next, t, nil
 end
 
 for k,v in pairs(t) do block end
@@ -417,20 +417,19 @@ for k,v in next,t do block end
 ```lua
 array = {1,2,3,4,5,6,7}
 function elementIterator (collection)
-   local index = 0
-   local count = #collection
-   -- 闭包函数
-   return function ()
-      index = index + 1
-      if index <= count
-      then
-         --  返回迭代器的当前元素
-         return collection[index]
-      end
-   end
+    local index = 0
+    local count = #collection
+    -- 闭包函数
+    return function ()
+        index = index + 1
+        if index <= count then
+        --  返回迭代器的当前元素
+            return collection[index]
+        end
+    end
 end
 for element in elementIterator(array) do
-   print(element)
+    print(element)
 end
 ```
 
@@ -448,24 +447,24 @@ end
 
 ```lua
 function Factorial(n)
-	local rt = 1;
-	::start::
-	if n == 0 then
-		return rt
-	else
-		rt = rt * n
-		n = n - 1
-		goto start
-	end
+    local rt = 1;
+    ::start::
+    if n == 0 then
+        return rt
+    else
+        rt = rt * n
+        n = n - 1
+        goto start
+    end
 end
 
 local i = 1
 while (true) do
-	if (i > 10) then
-		break
-	end
-	print(i .. "  " .. Factorial(i))
-	i = i + 1
+    if (i > 10) then
+        break
+    end
+    print(i .. "  " .. Factorial(i))
+    i = i + 1
 end
 ```
 
@@ -473,14 +472,14 @@ end
 
 ```lua
 while some_condition do
-	::redo::
-	if some_other_condition then
-		goto continue
-	else if yet_another_condition then
-		goto redo
-	end
-	<some_code>
-	::continue::
+    ::redo::
+    if some_other_condition then
+        goto continue
+    else if yet_another_condition then
+        goto redo
+    end
+    <some_code>
+    ::continue::
 end
 ```
 
@@ -491,7 +490,7 @@ end
 
 ```lua
 do
-	<some-code>
+    <some-code>
 end
 ```
 

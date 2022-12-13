@@ -21,8 +21,8 @@
 ```lua
 -- 可以认为 dofile 就是
 function dofile(filename)
-	local f = assert(loadfile(filename))
-	return f()
+    local f = assert(loadfile(filename))
+    return f()
 end
 ```
 
@@ -37,8 +37,8 @@ i = 32
 local i = 0
 f = load("i = i + 1; print(i)")
 g = function() i = i + 1; print(i) end
-f()		-- 33
-g()		-- 1
+f()    -- 33
+g()    -- 1
 ```
 
 - ```load``` 最典型的用法是执行外部代码或动态生成的代码
@@ -107,12 +107,12 @@ assert(tonumber(n),"invalid input: " .. n .. " is not a number")
 
 ```lua
 local status,err  = pcall(function()
-	<somecode-noreturn>
+    <somecode-noreturn>
 end)
 if status then
-	<Regular-code>
+    <Regular-code>
 else
-	<Error-handling-code>
+    <Error-handling-code>
 end
 ```
 

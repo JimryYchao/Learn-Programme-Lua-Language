@@ -4,9 +4,9 @@
 - [1. 具有动态名称的全局变量](#1-具有动态名称的全局变量)
 - [2. 全局变量的声明](#2-全局变量的声明)
 - [3. 非全局环境](#3-非全局环境)
-- [4. _ENV](#4-_env)
+- [4. \_ENV](#4-_env)
 - [5. 环境与模块](#5-环境与模块)
-- [6. _ENV 和 load](#6-_env-和-load)
+- [6. \_ENV 和 load](#6-_env-和-load)
 
 ---
 ## 1. 具有动态名称的全局变量
@@ -25,11 +25,11 @@ _G[varname] = newVal
 
 ```lua
 function getField(f)
-	local v = _G
-	for w in string.gmatch(f, "[%a_][%w_]*") do
-		v = v[w]
-	end
-	return v
+    local v = _G
+    for w in string.gmatch(f, "[%a_][%w_]*") do
+        v = v[w]
+    end
+    return v
 end
 
 Rt = getField("io.read")	--> function
@@ -39,15 +39,15 @@ Rt = getField("io.read")	--> function
 
 ```lua
 function setField(f,v)
-	local t = _G
-	for w,d in string.gmatch(f,"([%a_][%w_]*)(%.?)") do
-		if d == "." then
-			t[w] = t[w] or {}
-			t = t[w]
-		else
-			t[w] = v
-		end
-	end
+    local t = _G
+    for w,d in string.gmatch(f,"([%a_][%w_]*)(%.?)") do
+        if d == "." then
+            t[w] = t[w] or {}
+            t = t[w]
+        else
+            t[w] = v
+        end
+    end
 end
 
 setField("a.b.c.d",newVal);
@@ -62,12 +62,12 @@ setField("a.b.c.d",newVal);
 
 ```lua
 setmetatable(_G, {
-	__newindex = function(_, n)
-		error("Attempt to write to undeclared variable " .. n, 2)
-	end,
-	__index = function(_, n)
-		error("Attempt to read undeclared variable " .. n, 2)
-	end
+    __newindex = function(_, n)
+        error("Attempt to write to undeclared variable " .. n, 2)
+    end,
+    __index = function(_, n)
+        error("Attempt to read undeclared variable " .. n, 2)
+    end
 })
 
 print(var) -- Attempt to read undeclared variable var
@@ -78,7 +78,7 @@ print(var) -- Attempt to read undeclared variable var
 ```lua
 -- 需要声明在 setmetatable 重写方法之前
 function declare(name, initval)
-	rawset(_G, name, initval or false)
+    rawset(_G, name, initval or false)
 end
 
 declare("a", 1)
@@ -89,10 +89,10 @@ print(a)
 
 ```lua
 function isExist(varName)
-	if rawget(_G, varName) == nil then
-		return false
-	else return true
-	end
+    if rawget(_G, varName) == nil then
+        return false
+    else return true
+    end
 end
 
 isExist("varName")
@@ -103,24 +103,24 @@ isExist("varName")
 ```lua
 local declareNames = {}
 setmetatable(_G,{
-	__newindex = function (t,n,v)
-		if not declareNames[n] then
-			local w = debug.getinfo(2,"S").what
-			if w~= "main" and w~="C" then
-				error("Attempt to write to undeclared variable " .. n,2)
-			end
-			declareNames[n] = true
-		end
-		rawset(t,n,v)
-	end,
+    __newindex = function (t,n,v)
+        if not declareNames[n] then
+            local w = debug.getinfo(2,"S").what
+            if w~= "main" and w~="C" then
+                error("Attempt to write to undeclared variable " .. n,2)
+            end
+            declareNames[n] = true
+        end
+        rawset(t,n,v)
+    end,
 
-	__index = function (_,n)
-		if not declareNames[n] then
-			error("Attempt to read undeclared variable ".. n,2)
-		else
-			return nil
-		end
-	end
+    __index = function (_,n)
+        if not declareNames[n] then
+            error("Attempt to read undeclared variable ".. n,2)
+        else
+            return nil
+        end
+    end
 })
 ```
 
@@ -142,8 +142,8 @@ _ENV.x = _ENV.y + z
 ```lua
 local _ENV = <some-value>
 return function(...)
-	local z = 10
-	_ENV.x = _ENV.y + z
+    local z = 10
+    _ENV.x = _ENV.y + z
 end
 ```
 
@@ -163,9 +163,9 @@ end
 - 按照定义，```_ENV``` 永远指的是当前的环境，```_G``` 指的是全局环境。```_ENV``` 的主要用途是来改变代码段使用的环境
 
 ```lua
-_ENV = {} 	-- 将当前的环境改为一个新的空表
+_ENV = {}    -- 将当前的环境改为一个新的空表
 a = 1
-print(a) 	-- attempt to call global 'print'(a nil value)
+print(a)     -- attempt to call global 'print'(a nil value)
 ```
 
 > 改变 _ENV 环境
@@ -173,10 +173,10 @@ print(a) 	-- attempt to call global 'print'(a nil value)
 - 起初，```_G``` 和 ```_ENV``` 指向同一个表，创建的全局变量均可通过两者进行访问；若 ```_ENV``` 指向一个新的环境，```_ENV``` 将丢失起初的初始化状态
 
 ```lua
-a = 15				-- 创建 _ENV.a
-_ENV = {_G = _G}	-- 改变当前环境
-a = 1				-- 在新环境中创建 _ENV.a
-_G.print(_ENV.a, _G.a) 	--> 1	15
+a = 15              -- 创建 _ENV.a
+_ENV = {_G = _G}    -- 改变当前环境
+a = 1               -- 在新环境中创建 _ENV.a
+_G.print(_ENV.a, _G.a)  --> 1	15
 ```
 
 > 创建新环境继承旧环境
@@ -187,10 +187,10 @@ local newgt = {}
 setmetatable(newgt, { __index = _G })
 _ENV = newgt
 
-print(a, _G.a)	-- 10	1
+print(a, _G.a)  -- 10    1
 a = 10
 _G.a = 20
-print(a, _G.a)	-- 10	20
+print(a, _G.a)  -- 10   20
 ```
 
 > 定界规则
@@ -200,10 +200,10 @@ print(a, _G.a)	-- 10	20
 ```lua
 a = 2
 do
-	local _ENV = {print = print, a = 14}
-	print(a)	--> 14
+    local _ENV = {print = print, a = 14}
+    print(a)    --> 14
 end
-print(a)		--> 2，返回原始的 _ENV
+print(a)        --> 2，返回原始的 _ENV
 ```
 
 ---
@@ -217,7 +217,7 @@ _ENV = M
 
 -- func 会自动变成 M.func，其他模块加载时，不会把当前环境的全局变量共享过去
 function func()
-	<code>
+    <code>
 end
 return M;
 ```

@@ -4,7 +4,15 @@
 - [1. 元表](#1-元表)
 - [2. 算术运算相关的元方法](#2-算术运算相关的元方法)
 - [3. 关系运算相关的元方法](#3-关系运算相关的元方法)
-- [4. 库定义相关的元方法](#4-库定义相关的元方法)
+- [5. 其他类型的元方法](#5-其他类型的元方法)
+	- [5.1 `__call`](#51-__call)
+	- [5.2 `__tostring`](#52-__tostring)
+	- [5.3  `__name`](#53--__name)
+	- [5.4 `__gc`](#54-__gc)
+	- [5.5 `__close`](#55-__close)
+	- [5.6 `__mode`](#56-__mode)
+	- [5.7 `__metatable`](#57-__metatable)
+	- [5.8 `__pairs`](#58-__pairs)
 - [5. 表相关的元方法](#5-表相关的元方法)
 	- [5.1 具有默认值的表](#51-具有默认值的表)
 	- [5.2 跟踪对表的访问](#52-跟踪对表的访问)
@@ -21,8 +29,8 @@ local subTable, t = {}, {}
 print("Father:", setmetatable(subTable, metatable));
 print("SubTable:", getmetatable(subTable), metatable)
 --[[
-	Father: 	table: 00000111D4579E30
-	SubTable: 	table: 00000111D4579DB0 table: 00000111D4579DB0
+    Father: 	table: 00000111D4579E30
+    SubTable: 	table: 00000111D4579DB0 table: 00000111D4579DB0
 ]]
 ```
 
@@ -35,15 +43,15 @@ print("SubTable:", getmetatable(subTable), metatable)
 ```lua
 local mt = {}
 mt.__add = function(t1, t2)
-	local set = {}
-	local len = #t1 > #t2 and #t1 or #t2
-	for i = 1, len do
-		set[i] = t1[i]
-	end
-	for j = 1, #set do
-		set[j] = t1[j] + t2[j]
-	end
-	return set
+    local set = {}
+    local len = #t1 > #t2 and #t1 or #t2
+    for i = 1, len do
+        set[i] = t1[i]
+    end
+    for j = 1, #set do
+        set[j] = t1[j] + t2[j]
+    end
+    return set
 end
 
 local t1 = { 1, 2, 3, 4, 5, 6 }
@@ -53,7 +61,7 @@ setmetatable(t2, mt)
 
 local newt = t1 + t2
 for i = 1, #newt do
-	print(newt[i])	-- 7 7 7 7 7 7
+    print(newt[i])	-- 7 7 7 7 7 7
 end
 ```
 
@@ -61,71 +69,86 @@ end
 
 ```lua
 -- 算术
-__add	-- 加法	+
-__mul	-- 乘法	*
-__sub	-- 减法	-
-__div	-- 除法	\
-__idiv	-- floor 除法 \\
-__unm	-- 负数 -
-__mod	-- 取模	%
-__pow	-- 幂运算
+__add     -- 加法   +
+__mul     -- 乘法   *
+__sub     -- 减法   -
+__div     -- 除法   \
+__idiv    -- floor 除法 \\
+__unm     -- 负数   -
+__mod     -- 取模   %
+__pow     -- 幂运算
 -- 位运算
-__band	-- 按位与 &
-__bor	-- 按位或 |
-__bxor	-- 按位异或 ~
-__bnot	-- 按位取反 ~
-__shl	-- 左移 <<
-__shr	-- 右移 >>
+__band    -- 按位与 &
+__bor     -- 按位或 |
+__bxor    -- 按位异或  ~
+__bnot    -- 按位取反  ~
+__shl     -- 左移   <<
+__shr     -- 右移   >>
 -- 其他
-__concat 	-- 连接运算符 ..
-__len		-- 长度运算符 #
+__concat  -- 连接运算符  ..
+__len     -- 长度运算符  #
 ```
 
 ---
 ## 3. 关系运算相关的元方法
 
 ```lua
-__eq	-- 等于 ==
-__lt	-- 小于 <
-__le	-- 小于等于
+__eq    -- 等于 ==
+__lt    -- 小于 <
+__le    -- 小于等于
 
 -- 对于其他三种关系运算符，Lua 会进行转换，例如
-a ~= b	--> not (a == b)
-a > b	--> b < a
-a >= b	--> b <= a
+a ~= b  --> not (a == b)
+a > b   --> b < a
+a >= b  --> b <= a
 ```
 
 > 通常会将 a <= b 认为 a 是 b 的一个子集，常定义
 
 ```lua
 mt.__le = function(a, b)
-	for k in pairs(a) do
-		if not b[k] then return false end
-	end
-	return true
+    for k in pairs(a) do
+        if not b[k] then return false end
+    end
+    return true
 end
 mt.__lt = function(a, b)
-	return a <= b and not (b <= a)
+    return a <= b and not (b <= a)
 end
 mt.__eq = function(a, b)
-	return a <= b and b <= a
+    return a <= b and b <= a
 end
 
 local t1 = { 4, 10, 2 }
 local t2 = { 4, 2 }
 setmetatable(t1, mt)
 setmetatable(t2, mt)
-print(t1 > t2)	-- true
-print(t1 >= t2)	-- true
-print(t1 == t2)	-- false
-print(t1 < t2)	-- false
-print(t1 <= t2)	-- false
+print(t1 > t2)   -- true
+print(t1 >= t2)  -- true
+print(t1 == t2)  -- false
+print(t1 < t2)   -- false
+print(t1 <= t2)  -- false
 ```
 
 ---
-## 4. 库定义相关的元方法
+## 5. 其他类型的元方法
 
-> ```__tostring```
+### 5.1 `__call`
+
+- 调用操作 `func(args)`。当 Lua 试图调用一个非函数值（也就是说，func 不是一个函数）时，会发生此事件。元方法在 `func` 中查找。如果存在，元方法将以 `func` 作为第一个参数调用，然后是原始调用的参数 `args`。调用的所有结果都是操作的结果。这是唯一允许多个结果的元方法
+
+```lua
+local mt = { __call = function(self, message)
+    print(tostring(self) .. "._call: " .. message);
+end}
+
+local t = {}
+setmetatable(t, mt)
+t("CALL")
+```
+
+---
+### 5.2 `__tostring`
 
 - 函数 ```print``` 总是调用 ```tostring``` 来进行格式化输出，Lua 首先会检测一个操作中涉及的值是否有存在对应元方法的元表
 
@@ -135,26 +158,70 @@ print({})	-- table: 00000111D4579E30
 -- print 调用了表的元方法 __tostring
 local t1 = { 4, 10, 2 }
 mt.__tostring = function(self)
-	if #self == 0 then
-		return tostring(self)
-	end
-	local s = self[1]
-	for i = 1, #self do
-		if i ~= 1 then
-			s = string.format(s .. ',' .. tostring(self[i]))
-		end
-	end
-	return s
+    if #self == 0 then
+        return tostring(self)
+    end
+    local s = self[1]
+    for i = 1, #self do
+        if i ~= 1 then
+            s = string.format(s .. ',' .. tostring(self[i]))
+    	end
+    end
+    return s
 end
-print(t1)	-- 4,10,2
+print(t1)   -- 4, 10, 2
 t1 = {}
-print(t1)	-- table: 000002A055677EE0
+print(t1)   -- table: 000002A055677EE0
 ```
 
-> 其他
+---
+### 5.3  `__name`
+
+- 函数 ```tostring``` 首先会查找变量是否拥有 ```__tostring``` 元方法，否则如果元表拥有 `__name` 时，`tostring` 会将该值作为结果返回
+
+---
+### 5.4 `__gc`
+
+- 元表中拥有 `__gc` 字段时，子表在 `setmetatable` 之后会被标记为终结。如果设置的元表中没有 `__gc` 字段，然后在元表中创建该字段，子表对象将不会被标记为终结
+- 标记为终结的对象在垃圾回收阶段，收集器会调用该对象的 `__gc` 元方法，并且只会被调用一次，即使在垃圾回收阶段被永久复苏
+
+---
+### 5.5 `__close`
+
+- 当一个带关闭的对象离开其作用域时，将调用该对象的 `__close` 元方法，这为手动释放一些资源提供了可行的方式
+
+```lua
+function new_thing()
+    local thing = {}
+    setmetatable(thing, {
+        __close = function()
+            print("thing closed")
+        end
+    })
+    return thing
+end
+
+do
+    local x <close> = new_thing()
+    print("use thing")
+end
+-- "thing closed" is printed here after "use thing"
+```
+
+---
+### 5.6 `__mode`
+
+- `__mode` 字段与弱引用相关，可以设置表为弱引用表，其中需要关联的元表中拥有此字段，```__mode``` 的值确定了弱引用的类型，`"k"` 表示键弱引用，`"v"` 表示值弱引用，`"kv"` 表示键值弱引用
+
+---
+### 5.7 `__metatable`
 
 - 函数 ```setmetatable``` 和 ```getmetatable``` 用到了元方法，用于保护元表。假设要保护集合，即使用户既看不到也不能修改集合的元表，可以在元表中设置 ```__metatable``` 字段，那么 ```getmetatable``` 会返回这个字段，```setmetatable``` 会引发一个错误
-- 函数 ```pairs``` 对应元方法 ```__pairs```
+
+---
+### 5.8 `__pairs`
+
+- 函数 ```pairs``` 对应元方法 ```__pairs```，指定表在 for 迭代器中的迭代行为
 
 ---
 ## 5. 表相关的元方法
@@ -168,7 +235,7 @@ print(t1)	-- table: 000002A055677EE0
 
 ```lua
 mt.__index = function (...)
-	error("Index was outside the bounds of the table")
+    error("Index was outside the bounds of the table")
 end
 print(t1[10])
 ```
@@ -183,8 +250,8 @@ print(t1[10])
 
 ```lua
 function setDefault(t, d)
-	local dt = { __index = function() return d end }
-	setmetatable(t, dt)
+    local dt = { __index = function() return d end }
+    setmetatable(t, dt)
 end
 
 local nt = { x = 1, y = 2 }
@@ -197,29 +264,29 @@ print(nt.x, nt.z)	-- 1	0
 
 ```lua
 function track(t)
-	local proxy = {}
-	local mt = {
-		__index = function(_, k)
-			print("*access to element " .. tostring(k))
-			return t[k]
-		end,
-		__newindex = function(_, k, v)
-			print("*update of element " .. tostring(k) .. " to " .. tostring(v))
-			t[k] = v
-		end,
-		__pairs = function()
-			return function(_, k)
-				local nextKey, nextVal = next(t, k)
-				if nextKey ~= nil then
-					print("*traversing element " .. tostring(nextKey))
-				end
-				return nextKey, nextVal
-			end
-		end,
-		__len = function() return #t end
-	}
-	setmetatable(proxy, mt)
-	return proxy
+    local proxy = {}
+    local mt = {
+        __index = function(_, k)
+            print("*access to element " .. tostring(k))
+            return t[k]
+        end,
+        __newindex = function(_, k, v)
+            print("*update of element " .. tostring(k) .. " to " .. tostring(v))
+            t[k] = v
+        end,
+        __pairs = function()
+            return function(_, k)
+                local nextKey, nextVal = next(t, k)
+                if nextKey ~= nil then
+                    print("*traversing element " .. tostring(nextKey))
+                end
+                return nextKey, nextVal
+            end
+        end,
+        __len = function() return #t end
+    }
+    setmetatable(proxy, mt)
+    return proxy
 end
 
 t = { x = 1, y = 2, z = 3 }
@@ -236,15 +303,15 @@ print(t[2])
 
 ```lua
 function readonly(t)
-	local proxy = {}
-	local mt = {
-		__index = t,
-		__newindex = function(t, k, v)
-			error("*attempt to update a readonly table", 2)
-		end
-	}
-	setmetatable(proxy, mt)
-	return proxy
+    local proxy = {}
+    local mt = {
+        __index = t,
+        __newindex = function(t, k, v)
+            error("*attempt to update a readonly table", 2)
+        end
+    }
+    setmetatable(proxy, mt)
+    return proxy
 end
 
 days = readonly { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" }

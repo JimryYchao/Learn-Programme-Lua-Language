@@ -21,14 +21,14 @@
 ```lua
 -- 复制文件
 function CopyFile(file, newfile)
-	local line = ""
-	if io.input(file) and io.output(newfile) then
-		repeat
-			io.write(line)
-			line = io.read("L")
-		until not line
-	end
-	io.close()
+    local line = ""
+    if io.input(file) and io.output(newfile) then
+        repeat
+            io.write(line)
+            line = io.read("L")
+        until not line
+    end
+    io.close()
 end
 
 CopyFile("file.lua", "newfile.lua")
@@ -42,8 +42,8 @@ io.input("a.lua")
 io.output("b.txt")
 local count = 0
 for line in io.lines() do
-	count = count + 1
-	io.write(string.format("%6d  ", count), line, "\n")
+    count = count + 1
+    io.write(string.format("%6d  ", count), line, "\n")
 end
 io.close()
 ```
@@ -57,11 +57,11 @@ io.close()
 > 混用完整和简单 IO 模型
 
 ```lua
-local temp = io.input() 	-- 保存当前输入流
+local temp = io.input()     -- 保存当前输入流
 io.input("newinput")
 -- 对新的输入流进行操作
-io.input():close()			-- 关闭当前流
-io.input(temp)				-- 恢复此前流
+io.input():close()          -- 关闭当前流
+io.input(temp)              -- 恢复此前流
 ```
 
 - ```io.read(arg)``` 实际是 ```io.input():read(args)``` 简写，```io.write(args)``` 是 ```io.output():write(args)``` 的简写
@@ -94,8 +94,8 @@ local cmd = string.format("mail -s '%s' '%s'",subject,ad)
 local f = io.popen(cmd, "w")	-- w 表示写入
 f:write([[
 sir:
-	Nothing important to say.
-	-- me
+    Nothing important to say.
+    -- me
 ]])
 f:close()
 ```

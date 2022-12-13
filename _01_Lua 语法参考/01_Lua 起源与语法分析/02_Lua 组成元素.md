@@ -4,7 +4,6 @@
 - [1. 标记与注释](#1-标记与注释)
 - [2. 关键字与保留字](#2-关键字与保留字)
 	- [2.1 Lua 标准关键字](#21-lua-标准关键字)
-	- [2.2 Lua 预留常用的保留字](#22-lua-预留常用的保留字)
 - [3. 全局变量与局部变量](#3-全局变量与局部变量)
 - [4. 类型声明](#4-类型声明)
 	- [4.1 nil（空）](#41-nil空)
@@ -30,7 +29,10 @@
 		- [4.6.4 表函数](#464-表函数)
 	- [4.7 thread（线程）](#47-thread线程)
 	- [4.8 userdata（用户类型）](#48-userdata用户类型)
-	- [4.9 弃元 \_](#49-弃元-_)
+- [5. 弃元 \_](#5-弃元-_)
+- [6. 局部属性（5.4）](#6-局部属性54)
+	- [6.1 const](#61-const)
+	- [6.2 close](#62-close)
 
 ---
 ## 1. 标记与注释
@@ -40,32 +42,32 @@
 - Lua 标记（标识符）为程序中的变量、函数和标签提供名称，名称在拼写和大小写上必须与任何关键字都不同。标识符的首字符不可以是数字字符
 
 ```lua
-  -- 有效标识符
-	_Identifier
-	Identifier
-	Identifier123
+-- 有效标识符
+_Identifier
+Identifier
+Identifier123
 ```
 
 > ***注释***
 
 ```lua
-	--	单行注释
+--  单行注释
 
-	--[[
-		多行注释
-	]]--
+--[[
+    多行注释
+]]--
 
-	--[[
-		多行注释
-	]]
+--[[
+    多行注释
+]]
 
-	--[[
-		多行注释
-	--]]
+--[[
+    多行注释
+--]]
 
-	--[=[
-		多行注释
-	]=]--
+--[=[
+    多行注释
+]=]--
 ```
 
 ---
@@ -73,37 +75,33 @@
 ### 2.1 Lua 标准关键字
 
 ```lua
-	local		--> 声明局部类型
-	function	--> 函数类型声明符
-	nil			--> 空
+local       --> 声明局部类型
+function    --> 函数类型声明符
+nil         --> 空
 
-	and			-->	逻辑运算 与
-	not			--> 逻辑运算 非
-	or			--> 逻辑运算 或
+and         --> 逻辑运算 与
+not         --> 逻辑运算 非
+or          --> 逻辑运算 或
 
-	if			--> 条件语句 if 分支
-	else		--> 条件语句 else 分支
-	elseif		--> 条件语句 elseif 分支
-	end			--> 程序块结束标志
-	false		--> 布尔逻辑值 假
-	true		--> 布尔逻辑值 真
+if          --> 条件语句 if 分支
+else        --> 条件语句 else 分支
+elseif      --> 条件语句 elseif 分支
+end         --> 程序块结束标志
+false       --> 布尔逻辑值 假
+true        --> 布尔逻辑值 真
 
-	for			--> for 循环
-	in			--> for 循环 in 表达式
-	then		--> for 循环体
-	while		--> while 循环
-	do			-->	do 语句块
-	repeat		-->	repeat 循环
-	until		-->	repeat 循环 until 表达式
+for	        --> for 循环
+in          --> for 循环 in 表达式
+then        --> for 循环体
+while       --> while 循环
+do          --> do 语句块
+repeat      --> repeat 循环
+until       --> repeat 循环 until 表达式
 
-	break		--> 跳出循环
-	goto		--> 跳转语句
-	return		-->	返回语句
+break       --> 跳出循环
+goto        --> 跳转语句
+return      --> 返回语句
 ```
-
----
-### 2.2 Lua 预留常用的保留字
-
 
 ---
 ## 3. 全局变量与局部变量
@@ -111,10 +109,11 @@
 - Lua 在文件范围内，变量默认情况下被认为是全局的。仅被声明的变量其默认值为 ```nil```。可以使用 ```nil``` 值将一个不再使用的变量置空，Lua 会自动回收该变量占用的内存
 
 ```lua
-	a			-- 变量声明，默认为 nil
-	print(a)	--> nil
-	a = 10; print(a);	--> 10
-	a = nil		-- 置空，垃圾自动回收
+a           -- 变量声明，默认为 nil
+print(a)    --> nil
+a = 10;
+print(a);   --> 10
+a = nil     -- 置空，垃圾自动回收
 ```
 
 > ***local 局部变量***
@@ -125,12 +124,12 @@
 str = "Hello"
 
 f = function()
-	local str = "World"		-- str 为函数块 f 的局部变量
-	print(str)
+    local str = "World"    -- str 为函数块 f 的局部变量
+    print(str)
 end
 
-f()				--> World
-print(str) 		--> Hello
+f()              --> World
+print(str)       --> Hello
 ```
 
 > 应该尽可能的使用局部变量
@@ -147,14 +146,14 @@ print(str) 		--> Hello
 
 ```lua
 -- type 函数可以获取值的类型，函数的返回值不可丢弃
-type(nil)		--> nil
-type(true)		--> boolean
-type(1234)		--> number
-type("Hello")	--> string
-type(io.stdin)	--> userdata
-type(print)		--> function
-type({})		--> table
-type(type(X))	--> string
+type(nil)       --> nil
+type(true)      --> boolean
+type(1234)      --> number
+type("Hello")   --> string
+type(io.stdin)  --> userdata
+type(print)     --> function
+type({})        --> table
+type(type(X))   --> string
 ```
 
 - userdata 类型允许把任意的 C 语言数据保存在 Lua 语言变量中。在 Lua 语言中，用户数据类型除了赋值和相等性测试外，没有其他预定义的操作
@@ -172,18 +171,18 @@ for k, v in pairs(tab1) do
     print(k .. " - " .. v)
 end
 --[[
-	1 - val3
-	key1 - val1
-	key2 - val2
+    1 - val3
+    key1 - val1
+    key2 - val2
 --]]
 ----------------------------------
-tab1.key1 = nil		-- 删除 key1 键值对
+tab1.key1 = nil       -- 删除 key1 键值对
 for k, v in pairs(tab1) do
     print(k .. " - " .. v)
 end
 --[[
-	1 - val3
-	key2 - val2
+    1 - val3
+    key2 - val2
 --]]
 ```
 
@@ -200,10 +199,10 @@ end
 - 数值字面量可以使用科学计数法。具有十进制小数或者指数的数值会被当做浮点型值，否则会被当做整型值
 
 ```lua
-n1 = 4		--> 整型 number
-n2 = 0.4	--> 浮点型
-n3 = 1.3e-2	--> 浮点型，科学计数法
-n4 = 5E10	--> 浮点型，科学计数法
+n1 = 4           --> 整型 number
+n2 = 0.4         --> 浮点型
+n3 = 1.3e-2      --> 浮点型，科学计数法
+n4 = 5E10        --> 浮点型，科学计数法
 ```
 
 > 数值类型相等
@@ -211,16 +210,16 @@ n4 = 5E10	--> 浮点型，科学计数法
 - 整型和浮点型都是 number，算数值相同的整型值和浮点型值在 Lua 中是相等的
 
 ```lua
-	1 == 1.0		--> true
-	-3 == -3.0		--> true
-	0.2e3 == 200 	--> true
+1 == 1.0         --> true
+-3 == -3.0       --> true
+0.2e3 == 200     --> true
 ```
 
 > ***math.type()*** 可以用于区分数值类型
 
 ```lua
-	print(math.type(1))		--> integer
-	print(math.type(1.5))	--> float
+print(math.type(1))        --> integer
+print(math.type(1.5))      --> float
 ```
 
 > 十六进制浮点数
@@ -230,9 +229,9 @@ n4 = 5E10	--> 浮点型，科学计数法
 ```lua
 num = 0xa.1fp10;
 --[[
-	a   ---- 10
-	.1f ---- 1/16 + 15/256
-	p10 ---- 2^10
+    a   ---- 10
+    .1f ---- 1/16 + 15/256
+    p10 ---- 2^10
 ]]--
 0xa.1fp10 = (10 + 1/16 + 15/256) * 2^10 = 10364.0
 ```
@@ -240,8 +239,8 @@ num = 0xa.1fp10;
 - 使用 ```%a``` 格式转换说明符，进行十六进制浮点数格式化输出
 
 ```lua
-	string.format("%a", 666)	--> 0x1.4dp+9
-	string.format("%a", 0.1)	--> 0x1.999999999999ap-4
+    string.format("%a", 666)    --> 0x1.4dp+9
+    string.format("%a", 0.1)    --> 0x1.999999999999ap-4
 ```
 
 > 浮点型与整型之间的转换
@@ -251,21 +250,21 @@ num = 0xa.1fp10;
 - 对小数进行取整必须显式地调用取整函数
 
 ```lua
-	12345 + 0.0 	--> 12345.0
-	12345.0 | 0		--> 12345
-	2^53		--> 9.007199254741e+15	(浮点型值)
-	2^53 | 0	--> 9007199254740922	(整型值)
+12345 + 0.0    --> 12345.0
+12345.0 | 0    --> 12345
+2^53           --> 9.007199254741e+15	(浮点型值)
+2^53 | 0       --> 9007199254740922	(整型值)
 -- error
-	3.2 | 0		--> 小数部分 > 0
-	2^64 | 0	--> 超出范围
+3.2 | 0        --> 小数部分 > 0
+2^64 | 0       --> 超出范围
 ```
 
 - 另外一种方式是利用库函数 ```math.tointeger```，```math.tointeger``` 方法在无法转换成整数时返回 ```nil```
 
 ```lua
 -- math.tointeger
-	math.tointeger(12345.0)	--> 12345
-	math.tointeger(5.01)	--> nil
+math.tointeger(12345.0)	--> 12345
+math.tointeger(5.01)	--> nil
 ```
 
 > 数值范围和溢出
@@ -274,12 +273,12 @@ num = 0xa.1fp10;
 - 对于浮点值，双精度 64 位浮点数的范围在 $-10^{308}$ ~ $10 ^ {308}$。使用浮点数精确表示整数，其范围被限制在 $-2^{53}$ ~ $2^{53}$ 之间超过这个范围后，整型转换成浮点数之后会丢是精度
 
 ```lua
-	-- 2^53 = 9007199254740922
-	9007199254740921 + 0.0 == 9007199254740921 	--> true，浮点转换
-	9007199254740922 + 0.0 == 9007199254740922 	--> true
+-- 2^53 = 9007199254740922
+9007199254740921 + 0.0 == 9007199254740921 	--> true，浮点转换
+9007199254740922 + 0.0 == 9007199254740922 	--> true
 
-	-- 超出浮点数精确表示整型数值的范围，转换成浮点数时，整型精度丢失
-	9007199254740923 + 0.0 == 9007199254740923  --> false
+-- 超出浮点数精确表示整型数值的范围，转换成浮点数时，整型精度丢失
+9007199254740923 + 0.0 == 9007199254740923  --> false
 ```
 
 ---
@@ -294,8 +293,8 @@ num = 0xa.1fp10;
 - 可以使用 ```"string"``` 或 ```'string'``` 一对双引号或单引号来声明字符串常量。它俩的区别在于，使用双引号声明的字符串中出现单引号时，单引号可以不用转义；使用单引号声明的字符串中出现双引号时，双引号可以不用转义
 
 ```lua
-	a = "a line"
-	b = 'another line'
+a = "a line"
+b = 'another line'
 ```
 
 > 行字符串
@@ -304,8 +303,8 @@ num = 0xa.1fp10;
 
 ```lua
 str = [=[
-	Hello
-	World
+    Hello
+    World
 ]=]
 ```
 
@@ -315,8 +314,8 @@ str = [=[
 - ```#``` 长度操作符可以获取字符串的长度。该操作符返回字符串占用的字节数，由于编码的不同，返回值可能和字符串中字符个数不同。例如中文单个字符占用 3 个字节
 
 ```lua
-	a = "Hello"
-	print(#a)	--> 5
+a = "Hello"
+print(#a)	--> 5
 ```
 
 ---
@@ -325,42 +324,42 @@ str = [=[
 - ```..``` 连接操作符用来字符串拼接并组合成一个新的字符串，第二个操作数可以是 number，Lua 会预先将 number 转换成字符串
 
 ```lua
-	"Hello ".."World"	--> Hello World
-	"Result is "..3		--> Result is 3
+"Hello ".."World"     --> Hello World
+"Result is "..3       --> Result is 3
 ```
 
 ---
 #### 4.4.4 转义字符
 
 ```lua
-	\a		--> 响铃
-	\b		-->	退格
-	\f		--> 换页
-	\n		--> 换行
-	\r		--> 回车
-	\t		--> 水平制表符
-	\v		--> 垂直制表符
-	\\		--> 反斜杠
-	\'		--> 单引号
-	\"		--> 双引号
-	\0		--> 空字符
-	\ddd,\xhh, \u{h…h}	--> 声明字符，ddd 3个十进制数字序列，h 表示十六进制数
-	\[,\]	--> 方括号
+\a           --> 响铃
+\b           -->	退格
+\f           --> 换页
+\n           --> 换行
+\r           --> 回车
+\t           --> 水平制表符
+\v           --> 垂直制表符
+\\           --> 反斜杠
+\'           --> 单引号
+\"           --> 双引号
+\0           --> 空字符
+\ddd,\xhh, \u{h…h}   --> 声明字符，ddd 3个十进制数字序列，h 表示十六进制数
+\[,\]        --> 方括号
 ```
 
 - ```\z```：忽略其后的字符直至遇到空白字符开始，继续忽略中间的空白字符和 EOF 直至遇到第一个非空白字符（空白字符值得是文本输入下的空白字符，不是转义后的空白字符）
 
 ```lua
-	"12345\z    6"	--> 123456
+"12345\z    6"  --> 123456
 
-	"12345\z
-	678"		--> 12345678
+"12345\z
+678"            --> 12345678
 
-	"123\z     \r678"
-	--[[
-		123
-		678
-	]]
+"123\z     \r678"
+--[[
+    123
+    678
+]]
 ```
 
 ---
@@ -370,17 +369,17 @@ str = [=[
 - 其他的运算符（如比较）不会对字符串或数值进行强制类型转换
 
 ```lua
-	math.cos("0")		--> 1.0
-	print(1 + "2")		--> 3
-	print(1 + "0x1")	--> 2
+math.cos("0")		--> 1.0
+print(1 + "2")		--> 3
+print(1 + "0x1")	--> 2
 ```
 
 - 在需要字符串的地方出现了数值类型，Lua 会把数值转换成字符串
 - ```..``` 拼接两个数值类型的操作数时为避免编译时歧义，操作符要与第一个操作数之间间隔一个空格，避免被认为是小数点
 
 ```lua
-	print(1 .. 2)		--> 12
-	print(1 ..234)		--> 1234
+print(1 .. 2)		--> 12
+print(1 ..234)		--> 1234
 ```
 
 > 显式转换为数值
@@ -388,9 +387,9 @@ str = [=[
 - ```tonumber(str [,n])```，默认行为是转换成十进制数值，失败时返回 nil；传入 n 用于指定待转换字符串的进制，最大可以指明使用二进制到三十六进制之间的任何进制
 
 ```lua
-	tonumber("  -15")		--> -15
-	tonumber("10e4")	--> 100000.0
-	tonumber("fff", 16)	--> 4095
+tonumber("  -15")      --> -15
+tonumber("10e4")       --> 100000.0
+tonumber("fff", 16)	   --> 4095
 ```
 
 ---
@@ -487,10 +486,10 @@ print(a[key1])	--> "Great"
 
 ```lua
 b = {
-	Key1 = "K1",
-	["Key2"] = "K2",
-	[1] = 1,
-	[2] = 2
+    Key1 = "K1",
+    ["Key2"] = "K2",
+    [1] = 1,
+    [2] = 2
 }
 ```
 
@@ -503,10 +502,10 @@ b = {
 
 ```lua
 b = {
-	Key1 = "K1",
-	["Key2"] = "K2",
-	[1] = 1,
-	[2] = 2
+    Key1 = "K1",
+    ["Key2"] = "K2",
+    [1] = 1,
+    [2] = 2
 }
 
 -- b.Key1、b.Key2、b[1]...
@@ -523,10 +522,10 @@ a = {}
 a[2.0] = 10
 a[2.1] = 20
 
-print(a[2.0], a[2], a[2.1])		--> 10	10	20
+print(a[2.0], a[2], a[2.1])     --> 10	10	20
 
 a[1.000000000000000001] = 30
-print(a[1])			--> 30；由于精度丢失问题，Lua 判定这两个数值相等
+print(a[1])	     --> 30；由于精度丢失问题，Lua 判定这两个数值相等
 
 ```
 
@@ -574,11 +573,11 @@ Arr = {[1]=1,[2]=2,[4]=4,[5]=5,[7]=7,[8]=8}
 - 列表末端的 ```nil``` 值会被忽略而不计入总长，列表内部的 ```nil``` 值使得该列表存在空洞，对于中间存在空洞的列表而言，列表长度操作符是不可靠的。
 
 ```lua
-a = {1,2,3,4,5,6}		--> #a = 6
-a = {1,2,3,nil,nil}		--> #a = 3
-a = {1,nil,nil,nil,nil,2}	--> #a = 6
+a = {1,2,3,4,5,6}       --> #a = 6
+a = {1,2,3,nil,nil}     --> #a = 3
+a = {1,nil,nil,nil,nil,2}    --> #a = 6
 a = {}
-a[1] = 1; a[2] = 2; a[4] = 4	--> #a = 4, 中间存在空洞
+a[1] = 1; a[2] = 2; a[4] = 4  --> #a = 4, 中间存在空洞
 ```
 
 ---
@@ -600,19 +599,19 @@ zip = (((company or E).director or E).address or E).zipcode
 
 ```lua
 function Add(a)
-	local sum = 0
-	for i = 1, #a do
-		sum = sum + a[i]
-	end
-	return sum
+    local sum = 0
+    for i = 1, #a do
+        sum = sum + a[i]
+    end
+    return sum
 end
 -------------------------------
 Add = function(a)
-	local sum = 0
-	for i = 1, #a do
-		sum = sum + a[i]
-	end
-	return sum
+    local sum = 0
+    for i = 1, #a do
+        sum = sum + a[i]
+    end
+    return sum
 end
 ```
 
@@ -620,13 +619,13 @@ end
 
 ```lua
 (function()
-	<some-code>
+    <some-code>
 end)()
 --------------------
 table.sort(network,
-	function(a, b)
-		return (a.name > b.name)
-	end)
+    function(a, b)
+        return (a.name > b.name)
+    end)
 ```
 
 > 函数调用
@@ -634,8 +633,8 @@ table.sort(network,
 - 一般情况下，函数调用时需要一对括号 ```()``` 把参数列表括起来，无参时也需要一对空括号；但当函数只有一个参数且该参数是字符串常量或表构造器时，括号是可选的
 
 ```lua
-print "Hello"   -- print("Hello")
-type{}			-- type({})
+print "Hello"    -- print("Hello")
+type{}           -- type({})
 ```
 
 - 调用函数时使用的参数个数可以与定义函数时使用的参数个数不一致。Lua 会通过抛弃多余参数或用 ```nil``` 补足的方式来调整参数的个数
@@ -648,7 +647,7 @@ type{}			-- type({})
 
 ```lua
 function Foo(a)
-	return a, a ^ 2, a ^ 3
+    return a, a ^ 2, a ^ 3
 end
 
 a,b,c = Foo(2)
@@ -658,13 +657,13 @@ a,b,c = Foo(2)
 
 ```lua
 function foo(a,b)
-	print(a+b)
+    print(a+b)
 end
 function boo(a)
-	return a, a^2
+    return a, a^2
 end
 
-foo(boo(2))		--> foo(2,4) --> 6
+foo(boo(2))       --> foo(2,4) --> 6
 ```
 
 > 利用表完整接收函数的多重值返回
@@ -673,10 +672,10 @@ foo(boo(2))		--> foo(2,4) --> 6
 
 ```lua
 function Foo(a)
-	return a, a^2, a^3
+    return a, a^2, a^3
 end
 
-t = {Foo(2)} 	--> t = {2,4,8}
+t = {Foo(2)}     --> t = {2,4,8}
 ```
 
 > 多重赋值
@@ -703,13 +702,13 @@ t[a],t[b] = t[b],t[a]
 
 ```lua
 function Foo(a, ...)
-	local t = { ... }
-	if (#t > 0) then
-		for i = 1, #t do
-			print(t[i])
-		end
-	end
-	print("end :" .. a)
+    local t = { ... }
+    if (#t > 0) then
+        for i = 1, #t do
+            print(t[i])
+        end
+    end
+    print("end :" .. a)
 end
 Foo(1, 2, 3, 4, 5, 6)
 ```
@@ -721,14 +720,14 @@ Foo(1, 2, 3, 4, 5, 6)
 ```lua
 -- 打印奇数位的元素
 function Foo(...)
-	local len = select("#", ...)
-	local i = 1
-	local a = 0
-	while i <= len do
-		a = select(i, ...)
-		print(a)
-		i = i + 2
-	end
+    local len = select("#", ...)
+    local i = 1
+    local a = 0
+    while i <= len do
+        a = select(i, ...)
+        print(a)
+        i = i + 2
+    end
 end
 Foo(1,2,3,4,5,6,7,8)	-- 1 3 5 7
 ```
@@ -740,8 +739,8 @@ Foo(1,2,3,4,5,6,7,8)	-- 1 3 5 7
 
 ```lua
 function f(x)
-	x = x + 1
-	return g(x)
+    x = x + 1
+    return g(x)
 end
 ```
 
@@ -756,13 +755,13 @@ end
 
 ```lua
 local function f(params)
-	<some-code>
+    <some-code>
 end
 ----------------------------
 local function fact(n)
-	if n == 0 then return 1
-	else return n * fact(n - 1)
-	end
+    if n == 0 then return 1
+    else return n * fact(n - 1)
+    end
 end
 ```
 
@@ -770,7 +769,7 @@ end
 
 ```lua
 local f = function(params)
-	<some-code>
+    <some-code>
 end
 ```
 
@@ -779,7 +778,7 @@ end
 ```lua
 local f
 f = function(params)
-	<some-code>
+    <some-code>
 end
 ```
 
@@ -792,10 +791,10 @@ end
 
 ```lua
 function Counter(count)
-	return function ()
-		count = count +1
-		return count
-	end
+    return function ()
+        count = count +1
+        return count
+    end
 end
 
 c1 = Counter(10)	-- 从 10 开始计数
@@ -810,21 +809,21 @@ print(c1())		--> 13
 
 ```lua
 do
-	local oldOpen = io.open
-	local function access_OK(filename, mode)
-		-- check access --
-		if (file.Exist(filename)) then
-			return true
-		end
-		return false
-	end
-	-- 旧版的 io 访问只能通过新的 io 访问
-	io.open = function(filename, mode)
-		if access_OK(filename, mode) then
-			return oldOpen(filename, mode)
-		end
-		return nil, "access denied"
-	end
+    local oldOpen = io.open
+    local function access_OK(filename, mode)
+        -- check access --
+        if (file.Exist(filename)) then
+        	return true
+        end
+        return false
+    end
+    -- 旧版的 io 访问只能通过新的 io 访问
+    io.open = function(filename, mode)
+        if access_OK(filename, mode) then
+        	return oldOpen(filename, mode)
+        end
+        return nil, "access denied"
+    end
 end
 ```
 
@@ -837,9 +836,9 @@ end
 ```lua
 t = {1,2,3,4,5,6}
 t.Traverse = function (t)
-	for i =1,#t do
-		print(t[i])
-	end
+    for i =1,#t do
+        print(t[i])
+    end
 end
 t:Traverse()	-- 传递自身作为首位参数到表函数中
 ```
@@ -867,13 +866,54 @@ function T:Traverse()
 - 不能在 Lua 中创建或修改用户数据值，只能通过 C API。这保证了宿主程序和 C 库拥有的数据的完整性
 
 ---
-### 4.9 弃元 _
+## 5. 弃元 _
 
 - ```_``` 表示弃元，无法直接获取弃元的物理地址，也无法获取弃元的值。弃元一般用于占位或放弃赋值，常用于函数参数列表或多重赋值
 
 ```lua
-_, a = fun()		-- 表示放弃函数第一个返回值
-function foo(_, v)	-- 表示放弃第一个参数传递
+_, a = fun()         -- 表示放弃函数第一个返回值
+function foo(_, v)   -- 表示放弃第一个参数传递
+```
+
+---
+## 6. 局部属性（5.4）
+
+### 6.1 const
+
+- const 属性赋予局部变量常量属性，在当前的作用域范围内，不能对其进行赋值操作，但是不影响作为常量表对象的任意表成员的任何操作
+
+```lua
+local t <const> ={ a = 1}
+t = nil 	-- error
+t.a = 2		-- legal
+```
+
+---
+### 6.2 close
+
+- 一个 `to-be-closed` 对象的行为类似于一个局部常量（赋值后不能重新定义），必须对其设置 `__close` 元方法
+- 除了当变量超出作用域时，它的值是关闭的。关闭一个值意味着调用它的 `__close` 元方法，其值本身将作为第一个参数传递，若是因错误退出，则将错误作为第二个参数传递，否则为 `nil`
+- 而赋予 `<close>` 属性的值必须具有 `__close` 字段关联的元方法或 `false`，不存在时或 `__close = false` 时待关闭值被忽略
+- 如果几个要 `close` 的值在同一个事件中超出了作用域，它们将按照声明的相反顺序关闭；当运行 `__close` 方法时发生错误，则该错误将像定义变量的常规代码中的错误一样处理，发生错误后，其他挂起的关闭方法仍将被调用
+- 一个协程被挂起时且永远不会被恢复时，其设定 `__close` 的值可能永远不会超出作用域，因此它们也不会被关闭（这些变量是在写协程创建，并且在协程产生时的作用域内）。因此可以调用 `coroutine.close(co)` 或调用 `__gc` 关闭变量。但如果是协程中创建了协程，则其对应的函数将在错误的情况下关闭协程
+
+
+```lua
+function new_thing()
+    local thing = {}
+    setmetatable(thing, {
+        __close = function()
+            print("thing closed")
+        end
+    })
+    return thing
+end
+
+do
+    local x <close> = new_thing()
+    print("use thing")
+end
+-- "thing closed" is printed here after "use thing"
 ```
 
 ---

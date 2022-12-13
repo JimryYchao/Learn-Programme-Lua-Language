@@ -31,9 +31,9 @@ local f = require "mod".foo		--> 引入 mod 模块中的 foo 函数
 - 若要强制函数 ```require``` 加载同一模块两次，可以先将模块从 ```package.loaded``` 中删除（```package.loaded.ModName = nil```）
 
 ```lua
-local mod = require "Mod"	--> 首次加载
-package.loaded["Mod"] = nil --> 卸载 Mod
-local M = require "Mod"		--> 再次加载
+local mod = require "Mod"    --> 首次加载
+package.loaded["Mod"] = nil  --> 卸载 Mod
+local M = require "Mod"      --> 再次加载
 ```
 
 ---
@@ -44,12 +44,12 @@ local M = require "Mod"		--> 再次加载
 ```lua
 package.path = [[?;?.lua;c:windows\?;/usr/local/lua/?/?.lua]]
 local mod = require "sql"	-- 尝试搜索
-	--[[
-		spl
-		sql.lua
-		c:\windows\sql
-		/usr/local/lua/sql/sql.lua
-	]]
+    --[[
+        spl
+        sql.lua
+        c:\windows\sql
+        /usr/local/lua/sql/sql.lua
+    ]]
 
 package.cpath = [[.\"?.dll;C:\Program Files\Lua504\dll\?.dll]]
 ```
@@ -106,9 +106,9 @@ package.loaded["Mod"] = M
 ```lua
 -- 假设 path = ./?.lua;/usr/local/lua/?.lua;/usr/local/lua/?/init.lua
 -- 调用 require "a.b" 会尝试打开
-	"./a/b.lua"
-	"/usr/local/lua/a/b.lua"
-	"/usr/local/lua/a/b/init.lua"
+    "./a/b.lua"
+    "/usr/local/lua/a/b.lua"
+    "/usr/local/lua/a/b/init.lua"
 ```
 
 - Lua 语言使用的目录分隔符是编译时配置的，可以是任意的字符串。例如没有目录层次的系统可以使用下划线作为目录分隔符 ```require "a.b"``` 会搜索 ```a_b.lua```

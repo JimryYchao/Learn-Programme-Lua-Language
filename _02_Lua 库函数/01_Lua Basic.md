@@ -2,7 +2,7 @@
 
 ---
 - [1. Functions](#1-functions)
-	- [_G](#_g)
+	- [\_G](#_g)
 	- [print](#print)
 	- [next](#next)
 	- [warn](#warn)

@@ -21,9 +21,9 @@
 
 ```lua
 co = coroutine.create(
-	function ()
-		print("hello world")
-	end)
+    function ()
+        print("hello world")
+    end)
 ```
 
 ---
@@ -35,10 +35,10 @@ co = coroutine.create(
 
 ```lua
 co = coroutine.create(<function(params)>)
-print(coroutine.status(co))		-- suspended
+print(coroutine.status(co))     -- suspended
 
-coroutine.resume(co [,params])	-- running
-print(coroutine.status(co))		-- dead
+coroutine.resume(co [,params])  -- running
+print(coroutine.status(co))     -- dead
 ```
 
 ---
@@ -52,11 +52,11 @@ print(coroutine.status(co))		-- dead
 
 ```lua
 function _print(t)
-	local count = 0
-	while true do
-		count = count + 1
-		print("yield:: ", coroutine.yield(count))
-	end
+    local count = 0
+    while true do
+        count = count + 1
+        print("yield:: ", coroutine.yield(count))
+    end
 end
 
 local co = coroutine.create(_print)
@@ -65,11 +65,11 @@ print("resume:: " , coroutine.resume(co, 1, 1, 1))
 print("resume:: " , coroutine.resume(co, "hello"))
 
 --[[
-	resume::        true    1
-	yield::         1       1       1
-	resume::        true    2
-	yield::         hello
-	resume::        true    3
+    resume::        true    1
+    yield::         1       1       1
+    resume::        true    2
+    yield::         hello
+    resume::        true    3
 ]]
 ```
 
@@ -78,37 +78,37 @@ print("resume:: " , coroutine.resume(co, "hello"))
 
 ```lua
 function permgen(a, n)
-	n = n or #a
-	if n <= 1 then
-		coroutine.yield(a)
-	else
-		for i = 1, n do
-			a[n], a[i] = a[i], a[n]
- 			permgen(a, n - 1)
-			a[n], a[i] = a[i], a[n]
-		end
-	end
- end
+    n = n or #a
+    if n <= 1 then
+        coroutine.yield(a)
+    else
+        for i = 1, n do
+            a[n], a[i] = a[i], a[n]
+            permgen(a, n - 1)
+            a[n], a[i] = a[i], a[n]
+        end
+    end
+end
 
 function printResult(a)
-	for i = 1, #a do
-		io.write(a[i], " ")
-	end
-	io.write('\n')
+    for i = 1, #a do
+        io.write(a[i], " ")
+    end
+    io.write('\n')
 end
 
 function permutations(a)
-	local co = coroutine.create(function()
-		permgen(a)
-	end)
-	return function()
-		local code, res = coroutine.resume(co)
-		return res
-	end
+    local co = coroutine.create(function()
+        permgen(a)
+    end)
+    return function()
+        local code, res = coroutine.resume(co)
+        return res
+    end
 end
 
 for a in permutations { 1, 2, 3 } do
-	printResult(a)
+    printResult(a)
 end
 ```
 
@@ -138,16 +138,16 @@ cf()
 print(coroutine.running())
 local co
 co = coroutine.create(function()
-	print("join in co")
-	local c, ismain = coroutine.running()
-	print(c, ismain, "\nco : " .. tostring(co))
+    print("join in co")
+    local c, ismain = coroutine.running()
+    print(c, ismain, "\nco : " .. tostring(co))
 end)
 coroutine.resume(co)
 --[[
-	thread: 0000017C2872F458        true
-	join in co
-	thread: 0000017C287A43E8        false
-	co : thread: 0000017C287A43E8
+    thread: 0000017C2872F458        true
+    join in co
+    thread: 0000017C287A43E8        false
+    co : thread: 0000017C287A43E8
 ]]
 ```
 
@@ -158,8 +158,8 @@ coroutine.resume(co)
 ```lua
 local co
 co = coroutine.create(function()
-	print(coroutine.close(co)) -- cannot close a running coroutine
-	print("join in co")
+    print(coroutine.close(co)) -- cannot close a running coroutine
+    print("join in co")
 end)
 coroutine.resume(co)
 ```
@@ -171,12 +171,12 @@ coroutine.resume(co)
 
 ```lua
 -- main
-print(coroutine.isyieldable())	-- false, 主线程
+print(coroutine.isyieldable())     -- false, 主线程
 
 local co = coroutine.create(function()
-	print("join in co")
+    print("join in co")
 end)
-print(coroutine.isyieldable(co)) -- true
+print(coroutine.isyieldable(co))   -- true
 ```
 
 ---
