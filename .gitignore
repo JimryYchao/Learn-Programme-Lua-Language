@@ -1,0 +1,9 @@
+
+# C
+*.exe
+
+# test scripts
+[Tt]estSrc/
+
+# Lua
+*.lua

@@ -1,0 +1,7 @@
+{
+	"files.associations": {
+		"*.md": "markdown",
+		"luaconf.h": "c",
+		"lprefix.h": "c"
+	}
+}

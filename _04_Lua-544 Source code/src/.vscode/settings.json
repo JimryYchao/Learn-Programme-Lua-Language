@@ -1,0 +1,7 @@
+{
+	"files.associations": {
+		"*.md": "markdown",
+		"*.rh": "c"
+	},
+	"C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools"
+}
